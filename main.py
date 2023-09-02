@@ -1,15 +1,7 @@
-import requests
+from website import create_app
+from website import spotify_api
 
-# api key for favqs
-API_KEY = "9df9615581a3be73714e017f9b7f87b4"
+app = create_app()
 
-# url for favq quotes api
-API_URL = "https://favqs.com/api/quotes"
-
-# headers for using api
-headers = {
-"Authorization": f"Bearer {API_KEY}"
-}
-
-response = requests.get(API_URL, headers=headers)
-response_json = response.json()
+if __name__ == "__main__":
+    app.run(debug=True)
