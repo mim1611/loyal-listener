@@ -10,9 +10,8 @@
         <title>Home</title>
     </header>
     <body>
-        {% for i in hello -%}
-        <a href="songs.html" target=_blank>{{ i["name"] }}</a> <br>
-        <!-- {{ i["external_urls"]["spotify"] }} -->
+        {% for i in a -%}
+        <a href={{ i["external_urls"]["spotify"] }} target=_blank>{{ i["name"] }}</a> <br>
         {% endfor %}
 
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

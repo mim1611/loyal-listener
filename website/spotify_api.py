@@ -48,5 +48,3 @@ def get_songs_by_artist(token, artist_id):
     result = get(url, headers=headers)
     json_result = json.loads(result.content)["tracks"]
     return json_result
-
-token = get_token()
