@@ -10,7 +10,7 @@
         <title>Home</title>
     </header>
     <body>
-        {% for i in a -%}
+        {% for i in hello -%}
         <a href={{ i["external_urls"]["spotify"] }} target=_blank>{{ i["name"] }}</a> <br>
         {% endfor %}
 

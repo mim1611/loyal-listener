@@ -10,7 +10,7 @@ def home_blueprint():
     hi = artist
     return render_template("index.html", hello=hi)
 
-@home.route("/songs")
+@home.route("/songs.html")
 def songs_blueprint():
     token = get_token()
     artist = search_for_artist(token, "keshi")
