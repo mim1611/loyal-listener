@@ -25,15 +25,8 @@ home = Blueprint("home", __name__)
 @home.route("/")
 def home_blueprint():
     auth_url = f"{AUTH_URL}?client_id={CLIENT_ID}&response_type=code&redirect_uri={REDIRECT_URI}&scope={SCOPES}"
-    return redirect(auth_url)
+    return render_template("index.html", hi=auth_url)
 
-
-@home.route("/songs.html")
-def songs_blueprint():
-    token = get_token()
-    artist = search_for_artist(token, "keshi")
-    hi = artist
-    return render_template("songs.html", hello=hi)
 
 @home.route('/callback')
 def callback():
@@ -56,7 +49,14 @@ def callback():
     # Store the token info in the session or a database
     session['token_info'] = token_info
     
-    return 'Authenticated! You can now make API requests.'
+    return render_template("search.html")
+
+@home.route("/songs.html")
+def songs_blueprint():
+    token = get_token()
+    artist = search_for_artist(token, "keshi")
+    hi = artist
+    return render_template("songs.html", hello=hi)
 
 @home.route('/api_request')
 def api_request():

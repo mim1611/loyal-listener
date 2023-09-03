@@ -11,18 +11,7 @@
     </header>
     <body>
         <div>
-            {% for i in hello -%}
-            <div class="card">
-                {% if i['images'] %}
-                <img src="{{ i['images'][0]['url'] }}" height="60" width="60">
-                {% else %}
-                <img src="Images/blank.jpg" height="60" width="60">
-                {% endif %}
-                <p>
-                    {{ i["name"] }}
-                </p>
-            </div>
-            {% endfor %}
+            <input spellcheck="false" placeholder="Search for an artist" value>
         </div>
 
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
