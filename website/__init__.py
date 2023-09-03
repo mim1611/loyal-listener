@@ -1,5 +1,5 @@
 from flask import Flask
-from .spotify_api import get_token, get_auth_header, search_for_artist, get_songs_by_artist
+from .spotify_artist import get_token, get_auth_header, search_for_artist, get_songs_by_artist
 
 def create_app():
     app = Flask(__name__)

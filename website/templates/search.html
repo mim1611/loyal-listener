@@ -10,9 +10,20 @@
         <title>Loyal Listener</title>
     </header>
     <body>
-        {% for i in hello -%}
-        <a href={{ i["external_urls"]["spotify"] }} target=_blank>{{ i["name"] }}</a> <br>
-        {% endfor %}
+        <div>
+            {% for i in hello -%}
+            <div class="card">
+                {% if i['images'] %}
+                <img src="{{ i['images'][0]['url'] }}" height="60" width="60">
+                {% else %}
+                <img src="Images/blank.jpg" height="60" width="60">
+                {% endif %}
+                <p>
+                    {{ i["name"] }}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
 
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
