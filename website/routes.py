@@ -1,10 +1,8 @@
-from flask import Blueprint, render_template, request, redirect, session
-from website import get_token, search_for_artist
+from flask import Blueprint, render_template, request, session
+from website import get_token, search_for_artist, get_auth_header, get_songs_by_artist
 from dotenv import load_dotenv
 import os
 import base64
-from requests import post, get
-import json
 import requests
 
 load_dotenv()
@@ -14,14 +12,16 @@ CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 REDIRECT_URI = "http://localhost:5000/callback"
 
 # Authorization URL
-AUTH_URL = 'https://accounts.spotify.com/authorize'
+AUTH_URL = "https://accounts.spotify.com/authorize"
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
 
 # Scopes
 SCOPES = 'user-library-read'
+token = get_token()
 
 home = Blueprint("home", __name__)
 
+    
 @home.route("/")
 def home_blueprint():
     auth_url = f"{AUTH_URL}?client_id={CLIENT_ID}&response_type=code&redirect_uri={REDIRECT_URI}&scope={SCOPES}"
@@ -49,14 +49,18 @@ def callback():
     # Store the token info in the session or a database
     session['token_info'] = token_info
     
-    return render_template("search.html")
+    return search()
+
+@home.route("/search.html")
+def search():
+    global q
+    q = request.args.get('q')
+    return render_template("search.html", q=q)
 
 @home.route("/songs.html")
 def songs_blueprint():
-    token = get_token()
-    artist = search_for_artist(token, "keshi")
-    hi = artist
-    return render_template("songs.html", hello=hi)
+    artist = search_for_artist(token, q)
+    return render_template("songs.html", hello=artist)
 
 @home.route('/api_request')
 def api_request():
@@ -65,12 +69,10 @@ def api_request():
     access_token = token_info.get('access_token')
     
     # Make API requests using the access token
-    headers = {
-        'Authorization': f'Bearer {access_token}',
-    }
+    headers = get_auth_header(access_token)
     
     # Example API request to get a user's saved tracks
-    response = requests.get('https://api.spotify.com/v1/me/tracks', headers=headers)
+    response = requests.get('https://api.spotify.com/v1/me/playlists', headers=headers)
     data = response.json()
     
-    return data
+    return f"<p>{data}</p>"
