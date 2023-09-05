@@ -6,11 +6,11 @@ import json
 
 load_dotenv()
 
-client_id = os.getenv("CLIENT_ID")
-client_secret = os.getenv("CLIENT_SECRET")
+CLIENT_ID = os.getenv("CLIENT_ID")
+CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 
 def get_token():
-    auth_string = client_id + ":" + client_secret
+    auth_string = CLIENT_ID + ":" + CLIENT_SECRET
     auth_bytes = auth_string.encode("utf-8")
     auth_base64 = str(base64.b64encode(auth_bytes), "utf-8")
     
@@ -37,10 +37,12 @@ def search_for_artist(token, artist_name):
     result = get(query_url, headers=headers)
     json_result = json.loads(result.content)["artists"]["items"]
     if len(json_result) == 0:
-        print("No artist with this name exists...")
         return None
+    
+    # sort based on popularity
+    sorted_artist_list = sorted(json_result, key=lambda x: x["popularity"], reverse=True)
 
-    return json_result
+    return sorted_artist_list
 
 def get_songs_by_artist(token, artist_id):
     url = f"https://api.spotify.com/v1/artists/{artist_id}/top-tracks?country=US"

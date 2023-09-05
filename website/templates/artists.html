@@ -11,10 +11,19 @@
     </header>
     <body>
         <div>
-            <form method="GET">
-                <input spellcheck="false" placeholder="Search for an artist" name="artist_search">
-                <button>Search</button>
-            </form>
+            {% for i in hello %}
+                {% if i["images"] %}
+                    <div class="card">
+                        <img src="{{ i['images'][0]['url'] }}" height="60" width="60">
+                        <p>{{ i }}</p>
+                    </div>
+                {% else %}
+                    <div class="card">
+                        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" height="60" width="60">
+                        <p>{{ i }}</p>
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
 
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
