@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import os
 import base64
 import requests
+import json
 
 
 load_dotenv()
@@ -27,6 +28,14 @@ home = Blueprint("home", __name__)
 def is_logged_in():
     if session.get("token_info"):
         return True
+    
+def get_user_id():
+    token_info = session.get("token_info")
+    access_token = token_info.get("access_token")
+    headers = get_auth_header(access_token)
+    response = requests.get("https://api.spotify.com/v1/me", headers=headers)
+    response_json = json.loads(response.content)
+    return response_json["id"]
     
 @home.route("/")
 def home_blueprint():
@@ -82,7 +91,7 @@ def artists_blueprint():
     global artist_id
     artist_id = request.args.get('artist_id')
     if artist_id:
-        return redirect("/playlist")
+        return redirect("/songs.html")
     
     artist = search_for_artist(token, artist_search)
     return render_template("artists.html", hello=artist)
@@ -115,10 +124,3 @@ def playlist():
 #     data = response.json()
     
 #     return f"<p>{data}</p>"
-
-def get_user_id():
-    token_info = session.get("token_info")
-    access_token = token_info.get("access_token")
-    headers = get_auth_header(access_token)
-    response = requests.get("https://api.spotify.com/v1/me")
-    return response["id"]
