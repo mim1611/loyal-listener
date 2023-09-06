@@ -15,12 +15,14 @@
                 {% if i["images"] %}
                     <div class="card">
                         <img src="{{ i['images'][0]['url'] }}" height="60" width="60">
-                        <p>{{ i }}</p>
+                        <form method="GET">
+                            <input type="submit" name="artist_url" value="{{ i['href'] }}">
+                        </form>
                     </div>
                 {% else %}
                     <div class="card">
                         <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" height="60" width="60">
-                        <p>{{ i }}</p>
+                        <a href="songs.html">{{ i }}</a>
                     </div>
                 {% endif %}
             {% endfor %}

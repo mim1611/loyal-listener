@@ -65,23 +65,25 @@ def search():
     artist_search = request.args.get('artist_search')
     if artist_search and search_for_artist(token, artist_search):
         return redirect("/artists.html")
+    
     return render_template("search.html")
 
 @home.route("/artists.html")
 def artists_blueprint():
     if not is_logged_in():
         return redirect("/")
+    
     global artist_url
     artist_url = request.args.get('artist_url')
     if artist_url:
-        return redirect("songs.html")
+        return redirect("/songs.html")
     
     artist = search_for_artist(token, artist_search)
     return render_template("artists.html", hello=artist)
 
 @home.route("/songs.html")
 def songs_blueprint():
-    return render_template("songs.html")
+    return f"<p>{artist_url}</p>"
 
 @home.route('/api_request')
 def api_request():
