@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, session, redirect
-from website import get_token, search_for_artist, get_auth_header, get_songs_by_artist
+from website import get_token, search_for_artist, get_auth_header, get_albums_by_artist, get_songs_from_album
 from dotenv import load_dotenv
 import os
 import base64
@@ -83,8 +83,8 @@ def artists_blueprint():
 
 @home.route("/songs.html")
 def songs_blueprint():
-    songs = get_songs_by_artist(token, artist_id)
-    return render_template("songs.html", hello=songs)
+    albums = get_albums_by_artist(token, artist_id)
+    return render_template("songs.html", hello=albums)
 
 @home.route('/api_request')
 def api_request():

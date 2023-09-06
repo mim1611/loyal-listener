@@ -44,9 +44,17 @@ def search_for_artist(token, artist_name):
 
     return sorted_artist_list
 
-def get_songs_by_artist(token, artist_id):
-    url = f"https://api.spotify.com/v1/artists/{artist_id}/top-tracks?country=US"
+def get_albums_by_artist(token, artist_id):
+    url = f"https://api.spotify.com/v1/artists/{artist_id}/albums?limit=50"
     headers = get_auth_header(token)
     result = get(url, headers=headers)
-    json_result = json.loads(result.content)["tracks"]
+    json_result = json.loads(result.content)
     return json_result
+
+def get_songs_from_album(token, album_id):
+    url = f"https://api.spotify.com/v1/albums/{album_id}/tracks"
+    headers = get_auth_header(token)
+    result = get(url, headers=headers)
+    json_result = json.loads(result.content)
+    return json_result
+
