@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, session, redirect
-from website import get_token, search_for_artist, get_auth_header, get_albums_by_artist, get_songs_from_album, create_playlist
+from website import get_token, search_for_artist, get_auth_header, get_albums_by_artist, get_songs_from_album
 from dotenv import load_dotenv
 import os
 import base64
@@ -19,7 +19,8 @@ AUTH_URL = "https://accounts.spotify.com/authorize"
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
 REDIRECT_URI = "http://localhost:5000/callback"
 
-SCOPES = 'user-library-read'
+SCOPES = "user-library-read"
+HI = "playlist-modify-public"
 
 home = Blueprint("home", __name__)
 
@@ -43,7 +44,7 @@ def home_blueprint():
     if is_logged_in():
         return redirect("/search.html")
     
-    auth_url = f"{AUTH_URL}?client_id={CLIENT_ID}&response_type=code&redirect_uri={REDIRECT_URI}&scope={SCOPES}"
+    auth_url = f"{AUTH_URL}?client_id={CLIENT_ID}&response_type=code&redirect_uri={REDIRECT_URI}&scope={SCOPES},{HI}"
     return render_template("index.html", auth_url=auth_url)
 
 @home.route('/callback')
@@ -66,6 +67,7 @@ def callback():
     
     # Store the token info in the session or a database
     session["token_info"] = token_info
+    
     global user_id
     user_id = get_user_id()
     
@@ -91,7 +93,7 @@ def artists_blueprint():
     global artist_id
     artist_id = request.args.get('artist_id')
     if artist_id:
-        return redirect("/songs.html")
+        return redirect("/playlist")
     
     artist = search_for_artist(token, artist_search)
     return render_template("artists.html", hello=artist)
@@ -107,9 +109,23 @@ def songs_blueprint():
             songs.append(song)
     return render_template("songs.html", hello=songs)
 
-@home.route("/playlist", methods=["POST"])
+@home.route("/playlist", methods=["GET", "POST"])
 def playlist():
-    create_playlist(token, user_id)
+    user_id = get_user_id()
+    token_info = session.get("token_info")
+    access_token = token_info.get("access_token")
+    url = f"https://api.spotify.com/v1/users/{user_id}/playlists"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {access_token}"
+    }
+    data = json.dumps({
+        "name": "playlist",
+        "description": "description",
+        "public": True
+    })
+    result = requests.post(url, data=data, headers=headers)
+    return result.json()
 
 # @home.route('/api_request')
 # def api_request():

@@ -58,8 +58,3 @@ def get_songs_from_album(token, album_id):
     result = get(url, headers=headers)
     json_result = json.loads(result.content)["items"]
     return json_result
-
-def create_playlist(token, user_id):
-    url = f"https://api.spotify.com/v1/users/{user_id}/playlists"
-    headers = get_auth_header(token)
-    result = get(url, headers=headers)

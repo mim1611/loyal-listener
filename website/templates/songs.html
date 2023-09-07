@@ -10,12 +10,21 @@
         <title>Loyal Listener</title>
     </header>
     <body>
+        <div id="myBtnContainer">
+            <button class="btn" onclick="filterSelection('remix')">filter</button>
+        </div>
         <div>
             {% for i in hello %}
-                <p>{{ i["name"] }}</p><br>
+                {% if "Remix" not in i["name"] %}
+                    <div class="no_remix">{{ i["name"] }}</div><br>
+                {% else %}
+                    <div class="remix">{{ i["name"] }}</div><br>
+                {% endif %}
+
             {% endfor %}
         </div>
 
+        <script type="text/javascript" src="../scripts/script.js"></script>
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
