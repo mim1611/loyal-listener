@@ -22,7 +22,9 @@
                 {% else %}
                     <div class="card">
                         <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" height="60" width="60">
-                        <a href="songs.html">{{ i }}</a>
+                        <form method="GET">
+                            <input type="submit" name="artist_id" value="{{ i['id'] }}">
+                        </form>
                     </div>
                 {% endif %}
             {% endfor %}

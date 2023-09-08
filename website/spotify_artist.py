@@ -10,7 +10,7 @@ CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 
 def get_token():
-    auth_string = CLIENT_ID + ":" + CLIENT_SECRET
+    auth_string = f"{CLIENT_ID}:{CLIENT_SECRET}"
     auth_bytes = auth_string.encode("utf-8")
     auth_base64 = str(base64.b64encode(auth_bytes), "utf-8")
     
@@ -44,13 +44,19 @@ def search_for_artist(token, artist_name):
 
     return sorted_artist_list
 
+def artist_name(token, artist_id):
+    url = f"https://api.spotify.com/v1/artists/{artist_id}"
+    headers = get_auth_header(token)
+    result = get(url, headers=headers)
+    name = json.loads(result.content)["name"]
+    return name
+
 def get_albums_by_artist(token, artist_id):
     url = f"https://api.spotify.com/v1/artists/{artist_id}/albums?limit=50&include_groups=album,single"
     headers = get_auth_header(token)
     result = get(url, headers=headers)
     json_result = json.loads(result.content)["items"]
-    sorted_album_list = sorted(json_result, key=lambda x: x["release_date"])
-    return sorted_album_list
+    return sorted(json_result, key=lambda x: x["release_date"])
 
 def get_songs_from_album(token, album_id):
     url = f"https://api.spotify.com/v1/albums/{album_id}/tracks"
