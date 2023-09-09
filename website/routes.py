@@ -100,8 +100,8 @@ def artists_blueprint():
         playlist_name = artist_name(token, artist_id)
         return redirect("/songs.html")
     
-    artist = search_for_artist(token, artist_search)
-    return render_template("artists.html", hello=artist)
+    artists = search_for_artist(token, artist_search)
+    return render_template("artists.html", artists=artists)
 
 @home.route("/songs.html", methods=["GET", "POST"])
 def songs_blueprint():
