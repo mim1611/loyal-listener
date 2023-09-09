@@ -38,11 +38,8 @@ def search_for_artist(token, artist_name):
     json_result = json.loads(result.content)["artists"]["items"]
     if len(json_result) == 0:
         return None
-    
-    # sort based on popularity
-    sorted_artist_list = sorted(json_result, key=lambda x: x["popularity"], reverse=True)
 
-    return sorted_artist_list
+    return sorted(json_result, key=lambda x: x["popularity"], reverse=True)
 
 def artist_name(token, artist_id):
     url = f"https://api.spotify.com/v1/artists/{artist_id}"
@@ -63,6 +60,19 @@ def get_songs_from_album(token, album_id):
     headers = get_auth_header(token)
     result = get(url, headers=headers)
     json_result = json.loads(result.content)["items"]
+    return json_result
+
+def create_playlist(token, user_id, playlist_name):
+    url = f"https://api.spotify.com/v1/users/{user_id}/playlists"
+    headers = {
+        "Authorization": f"Bearer {token}"
+    }
+    data = json.dumps({
+        "name": f"{playlist_name} enthusiast",
+        "description": "f{playlist_name} made by Loyal Listener",
+    })
+    result = post(url, data=data, headers=headers)
+    json_result = json.loads(result.content)
     return json_result
 
 def populate_playlist(token, playlist_id, uri_list):
