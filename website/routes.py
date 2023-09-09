@@ -117,7 +117,7 @@ def songs_blueprint():
         for song in album_songs:
             uri_list.append(song["uri"])
             songs.append(song)
-    print(uri_list)
+
     new_playlist = create_playlist(access_token, user_id, playlist_name)
     new = populate_playlist(access_token, new_playlist["id"], uri_list)
     
