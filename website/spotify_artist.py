@@ -64,3 +64,12 @@ def get_songs_from_album(token, album_id):
     result = get(url, headers=headers)
     json_result = json.loads(result.content)["items"]
     return json_result
+
+def populate_playlist(token, playlist_id, uri_list):
+    url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
+    data = json.dumps({
+        "uris": uri_list
+    })
+    headers = get_auth_header(token)
+    result = post(url, data=data, headers=headers)
+    return result

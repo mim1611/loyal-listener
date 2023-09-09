@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, session, redirect
-from website import get_token, search_for_artist, get_auth_header, get_albums_by_artist, get_songs_from_album, artist_name
+from website import get_token, search_for_artist, get_auth_header, get_albums_by_artist, get_songs_from_album, artist_name, populate_playlist
 from dotenv import load_dotenv
 import os
 import base64
@@ -108,11 +108,14 @@ def songs_blueprint():
     albums = get_albums_by_artist(token, artist_id)
     global songs
     songs = []
+    global uri_list
+    uri_list = []
     for item in albums:
         album_songs = get_songs_from_album(token, item["id"])
         for song in album_songs:
+            uri_list.append(song["uri"])
             songs.append(song)
-    
+    print(uri_list)
     token_info = session.get("token_info")
     access_token = token_info.get("access_token")
     url = f"https://api.spotify.com/v1/users/{user_id}/playlists"
@@ -124,6 +127,9 @@ def songs_blueprint():
         "description": f"{playlist_name} playlist made by Loyal Listener"
     })
     result = requests.post(url, data=data, headers=headers)
+    json_result = json.loads(result.content)
+    new = populate_playlist(access_token, json_result["id"], uri_list)
+    
     return render_template("songs.html", hello=songs)
 
 # @home.route("/playlist", methods=["GET", "POST"])
