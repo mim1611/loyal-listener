@@ -91,7 +91,7 @@ def artists_blueprint():
         return redirect("/")
     
     global artist_id
-    artist_id = request.args.get('artist_id')
+    artist_id = request.args.get("artist_id")
     
     artist = search_for_artist(token, artist_search)
     
@@ -113,7 +113,6 @@ def songs_blueprint():
         for song in album_songs:
             songs.append(song)
     
-    user_id = get_user_id()
     token_info = session.get("token_info")
     access_token = token_info.get("access_token")
     url = f"https://api.spotify.com/v1/users/{user_id}/playlists"

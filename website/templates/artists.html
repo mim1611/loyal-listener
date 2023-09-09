@@ -16,7 +16,8 @@
                     <div class="card">
                         <img src="{{ i['images'][0]['url'] }}" height="60" width="60">
                         <form method="GET">
-                            <input type="submit" name="artist_id" value="{{ i['id'] }}">
+                            <input type="hidden" name="artist_id" value="{{ i['id'] }}">
+                            <button>{{ i["name"] }}</button>
                         </form>
                     </div>
                 {% else %}
