@@ -9,21 +9,21 @@ load_dotenv()
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 
-def get_token():
-    auth_string = f"{CLIENT_ID}:{CLIENT_SECRET}"
-    auth_bytes = auth_string.encode("utf-8")
-    auth_base64 = str(base64.b64encode(auth_bytes), "utf-8")
+# def get_token():
+#     auth_string = f"{CLIENT_ID}:{CLIENT_SECRET}"
+#     auth_bytes = auth_string.encode("utf-8")
+#     auth_base64 = str(base64.b64encode(auth_bytes), "utf-8")
     
-    url = "https://accounts.spotify.com/api/token"
-    headers = {
-        "Authorization": f"Basic {auth_base64}",
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
-    data = {"grant_type": "client_credentials"}
-    result = post(url, headers=headers, data=data)
-    json_result = json.loads(result.content)
-    token = json_result["access_token"]
-    return token
+#     url = "https://accounts.spotify.com/api/token"
+#     headers = {
+#         "Authorization": f"Basic {auth_base64}",
+#         "Content-Type": "application/x-www-form-urlencoded"
+#     }
+#     data = {"grant_type": "client_credentials"}
+#     result = post(url, headers=headers, data=data)
+#     json_result = json.loads(result.content)
+#     token = json_result["access_token"]
+#     return token
 
 def get_auth_header(token):
     return {"Authorization": f"Bearer {token}"}
@@ -69,7 +69,7 @@ def create_playlist(token, user_id, playlist_name):
     }
     data = json.dumps({
         "name": f"{playlist_name} enthusiast",
-        "description": "f{playlist_name} made by Loyal Listener",
+        "description": f"{playlist_name} playlist made by Loyal Listener",
     })
     result = post(url, data=data, headers=headers)
     json_result = json.loads(result.content)
@@ -77,9 +77,20 @@ def create_playlist(token, user_id, playlist_name):
 
 def populate_playlist(token, playlist_id, uri_list):
     url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
-    data = json.dumps({
-        "uris": uri_list
-    })
     headers = get_auth_header(token)
-    result = post(url, data=data, headers=headers)
-    return result
+    batch = []
+    while uri_list:
+        if len(batch) == 100:
+            data = json.dumps({
+                "uris": batch
+            })
+            post(url, data=data, headers=headers)
+            batch = []
+        batch.append(uri_list[0])
+        uri_list.pop(0)
+    if batch:
+        data = json.dumps({
+            "uris": batch
+        })
+        post(url, data=data, headers=headers)
+    return 

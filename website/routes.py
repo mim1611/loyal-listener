@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, session, redirect
-from website import get_token, search_for_artist, get_auth_header, get_albums_by_artist, get_songs_from_album, artist_name, create_playlist, populate_playlist
+from website import search_for_artist, get_auth_header, get_albums_by_artist, get_songs_from_album, artist_name, create_playlist, populate_playlist
 from dotenv import load_dotenv
 import os
 import base64
@@ -13,7 +13,7 @@ load_dotenv()
 # global variables for sending api requests
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
-token = get_token()
+# token = get_token()
 
 # urls
 AUTH_URL = "https://accounts.spotify.com/authorize"
@@ -82,7 +82,7 @@ def search():
 
     global artist_search
     artist_search = request.args.get('artist_search')
-    if artist_search and search_for_artist(token, artist_search):
+    if artist_search and search_for_artist(access_token, artist_search):
         return redirect("/artists.html")
     
     return render_template("search.html")
@@ -95,30 +95,30 @@ def artists_blueprint():
     global artist_id
     artist_id = request.args.get("artist_id")
     
-    artist = search_for_artist(token, artist_search)
+    artist = search_for_artist(access_token, artist_search)
     
     if artist_id:
         global playlist_name
-        playlist_name = artist_name(token, artist_id)
+        playlist_name = artist_name(access_token, artist_id)
         return redirect("/songs.html")
     
-    artists = search_for_artist(token, artist_search)
+    artists = search_for_artist(access_token, artist_search)
     return render_template("artists.html", artists=artists)
 
 @home.route("/songs.html", methods=["GET", "POST"])
 def songs_blueprint():
-    albums = get_albums_by_artist(token, artist_id)
+    albums = get_albums_by_artist(access_token, artist_id)
     global songs
     songs = []
     global uri_list
     uri_list = []
     for item in albums:
-        album_songs = get_songs_from_album(token, item["id"])
+        album_songs = get_songs_from_album(access_token, item["id"])
         for song in album_songs:
             uri_list.append(song["uri"])
             songs.append(song)
 
     new_playlist = create_playlist(access_token, user_id, playlist_name)
-    new = populate_playlist(access_token, new_playlist["id"], uri_list)
+    populate_playlist(access_token, new_playlist["id"], uri_list)
     
     return render_template("songs.html")
