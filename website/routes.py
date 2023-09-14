@@ -9,19 +9,16 @@ import json
 
 load_dotenv()
 
-
 # global variables for sending api requests
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
-# token = get_token()
 
 # urls
 AUTH_URL = "https://accounts.spotify.com/authorize"
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
 REDIRECT_URI = "http://localhost:5000/callback"
 
-SCOPES = "user-library-read"
-HI = "playlist-modify-public"
+SCOPES = "user-library-read,playlist-modify-public"
 
 home = Blueprint("home", __name__)
 
@@ -46,7 +43,7 @@ def home_blueprint():
     if is_logged_in():
         return redirect("/search.html")
     
-    auth_url = f"{AUTH_URL}?client_id={CLIENT_ID}&response_type=code&redirect_uri={REDIRECT_URI}&scope={SCOPES},{HI}"
+    auth_url = f"{AUTH_URL}?client_id={CLIENT_ID}&response_type=code&redirect_uri={REDIRECT_URI}&scope={SCOPES}"
     return render_template("index.html", auth_url=auth_url)
 
 @home.route('/callback')
@@ -108,15 +105,11 @@ def artists_blueprint():
 @home.route("/songs.html", methods=["GET", "POST"])
 def songs_blueprint():
     albums = get_albums_by_artist(access_token, artist_id)
-    global songs
-    songs = []
-    global uri_list
     uri_list = []
     for item in albums:
         album_songs = get_songs_from_album(access_token, item["id"])
         for song in album_songs:
             uri_list.append(song["uri"])
-            songs.append(song)
 
     new_playlist = create_playlist(access_token, user_id, playlist_name)
     populate_playlist(access_token, new_playlist["id"], uri_list)
