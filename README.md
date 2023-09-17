@@ -6,7 +6,7 @@ This web application uses the Spotify web API to create a playlist that includes
 ## Usage
 Unfortunately the Spotify web API only grants access to authenticated users. If you wish to use this app, please send me a message on the "Contact Me" section of my portfolio at https://jormyy.github.io/portfolio/ with your full name and email. Once authenticated, you can access the application at https://jorm.pythonanywhere.com.
 <br> <br>
-Alternatively, you could create your own app and use the code in the repository.
+Alternatively, you could use the code in the repository and run the application locally.
 1. Clone the repository.
 2. Create an app with https://developer.spotify.com.
 3. Set the redirect URI to http://localhost:5000/callback.
