@@ -15,37 +15,45 @@
         <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;"> <!-- center aligning -->
             <div class="wrap">
                 <form method="GET">
-                    <img class="icon" src="https://i.imgur.com/E0rd2qw.png">
+                    <button type ="submit"><img class="icon" src="https://i.imgur.com/E0rd2qw.png"></button>
                     <input class="bar" placeholder="Search for an artist.." name="artist_search">
                 </form>
             </div>
                 
         <style>
-            .wrap{
-                position: relative;
-                display: flex;
-            }
-            .icon{
-                position: absolute;
-                top: 17px;
-                right: 20px;
-                width: 28px;
-                cursor:pointer;
-            }
-            .bar{
-            border: 3px solid #1db954;
-            border-radius: 80px;
-            width: 325px;
-            height: 60px;
-            padding: 2px 2px 2px 22px;
-            outline: 0;
-            background-color: #dff3e6;
-            color: #000000;
-            }
-            ::placeholder {
-                color: #249f4f;
-                opacity: 0.7;
-            }       
+        .wrap{
+            position: relative;
+            display: flex;
+        }
+        .icon{
+            position: absolute;
+            top: 17px;
+            right: 20px;
+            width: 28px;
+        }
+        .bar{
+          border: 3px solid #1db954;
+          border-radius: 80px;
+          width: 325px;
+          height: 60px;
+          padding: 2px 2px 2px 22px;
+          outline: 0;
+          background-color: #dff3e6;
+          color: #000000;
+        }
+        ::placeholder {
+            color: #249f4f;
+            opacity: 0.7;
+        }
+        /* resetting the little thing that appears on the left to disappear*/
+        * {
+        margin: 0;
+        padding: 0;
+        }
+        button {
+        border: 0px;
+        float: left;
+        }         
         </style>
 
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
