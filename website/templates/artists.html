@@ -1,42 +1,109 @@
 <!DOCTYPE html>
 <html>
-    <header>
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-        crossorigin="anonymous"/>
-        <title>Loyal Listener</title>
-    </header>
-    <body>
-        <div>
-            {% for artist in artists %}
-                {% if artist["images"] %}
-                    <div class="card">
-                        <img src="{{ artist['images'][0]['url'] }}" height="60" width="60">
-                        <form method="GET">
-                            <input type="hidden" name="artist_id" value="{{ artist['id'] }}">
-                            <button>{{ artist["name"] }}</button>
-                        </form>
-                    </div>
-                {% else %}
-                    <div class="card">
-                        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" height="60" width="60">
-                        <form method="GET">
-                            <input type="hidden" name="artist_id" value="{{ artist['id'] }}">
-                            <button>{{ artist["name"] }}</button>
-                        </form>
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
+<head>
+    <link rel="icon" href="https://i.imgur.com/Aeru51m.png"> <!-- added favicon -->
+    <link href="https://unpkg.com/aos@2.3.2/dist/aos.css" rel="stylesheet"> <!-- aos for fade up -->
+    <style>
+        .title{
+            display: flex;
+            flex-wrap: wrap;
+            padding: 70px;
+            margin-top: 10px;
+        }
 
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-        <script rc="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
-    </body>
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 60px;
+            padding-top: 2px;
+            margin-top: -60px;
+        }
+        .card {
+            width: 20%; /* Adjust   width as needed to fit 4 cards in a row */
+            margin-bottom: 50px;
+            margin-top: 20px;
+            margin-right: 15px;
+            margin-left: 15px;
+            text-align: center;
+            overflow: hidden;
+            display: block;
+        }
+        .card img {
+            width: 100%;
+            height: 230px;
+            cursor: pointer; /* Add a pointer cursor for the clickable image */
+            transition: 0.3s transform ease;
+            transform: scale(1);
+        }
+        .card:hover img {
+            text-decoration: none;
+            transform: scale(1.10);
+                
+        }
+
+        .card:hover .bottom-left{
+            transform: scale(1.10);
+        }
+        
+        .bottom-left {
+            position: absolute;
+            bottom: 8px;
+            left: 10px;
+            color: #ffffff;
+            font-size: 30px; 
+            background-color: #03030348;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            transition: 0.3s transform ease;
+            text-align: left;
+        }
+        
+    </style>
+</head>
+
+<header>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    crossorigin="anonymous" />
+    <title>Loyal Listener</title>
+</header>
+<body>
+    <div class="title" data-aos="fade-up" data-aos-delay="200">
+        <h4>Select an artist to create playlist:</h4>
+    </div>
+    <div class="card-container" data-aos="fade-up" data-aos-delay="300" data-aos-duration="1000">
+        {% for artist in artists %}
+            {% if artist["images"] %}
+                <div class="card"> 
+                    <form method="GET">
+                        <input type="hidden" name="artist_id" value="{{ artist['id'] }}">
+                        <img src="{{ artist['images'][0]['url'] }}">
+                        <div class="bottom-left">{{ artist["name"] }}</div>
+                    </form>
+                </div>
+            {% else %}
+                <div class="card">
+                    <form method="GET">
+                        <input type="hidden" name="artist_id" value="{{ artist['id'] }}">
+                        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png">
+                        <div class="bottom-left">{{ artist["name"] }}</div>
+                    </form>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https:/unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init();</script>
+</body>
 </html>
